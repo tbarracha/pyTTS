@@ -1,8 +1,4 @@
-Here's a `README.md` file you can use for your GitHub repository:
 
----
-
-````markdown
 # pyTTS – FastAPI Text-to-Speech (Edge-TTS)
 
 **pyTTS** is a simple FastAPI-based Text-to-Speech service using Microsoft's Edge TTS engine. It supports:
@@ -138,10 +134,3 @@ Built using:
 ## 📄 License
 
 MIT License. Use freely and fork responsibly.
-
-```
-
----
-
-Let me know if you want to include Docker setup, Aspire orchestration, or deployment instructions later!
-```
