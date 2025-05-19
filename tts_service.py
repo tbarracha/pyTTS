@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import AsyncGenerator, Union, List, Dict, Optional
 from edge_tts import list_voices
 
-AUDIO_DIR = Path("data/audio/output")
+AUDIO_DIR = Path("data/output")
 AUDIO_DIR.mkdir(parents=True, exist_ok=True)
 
 async def synthesize_speech(
