@@ -1,24 +1,20 @@
 using Microsoft.CognitiveServices.Speech;
-using Microsoft.EntityFrameworkCore;
-using TtsApi.Data;
-using TtsApi.Entities;
 using TtsApi.Models;
 
 namespace TtsApi.Services;
 
 public class TtsService
 {
-    private readonly AppDbContext _db;
     private readonly SpeechConfig _config;
 
-    public TtsService(AppDbContext db, SpeechConfig config)
+    public TtsService(SpeechConfig config)
     {
-        _db = db;
         _config = config;
     }
 
     public async Task<string> SynthesizeAsync(TtsRequest req)
     {
+        _config.SpeechSynthesisVoiceName = req.Voice;
         using var synthesizer = new SpeechSynthesizer(_config);
         var result = await synthesizer.SpeakTextAsync(req.Text);
         if (result.Reason != ResultReason.SynthesizingAudioCompleted)
@@ -33,15 +29,18 @@ public class TtsService
 
     public async Task<IEnumerable<object>> GetVoicesAsync(ListVoicesRequest req)
     {
-        var voices = await _db.Voices.ToListAsync();
-        if (!string.IsNullOrEmpty(req.Language))
-            voices = voices.Where(v => v.Locale.StartsWith(req.Language, StringComparison.OrdinalIgnoreCase)).ToList();
+        using var synthesizer = new SpeechSynthesizer(_config);
+        var result = await synthesizer.GetVoicesAsync(req.Language ?? string.Empty);
+        if (result.Reason != ResultReason.VoicesListRetrieved)
+            throw new Exception(result.ErrorDetails);
+
+        var voices = result.Voices.AsEnumerable();
         if (!string.IsNullOrEmpty(req.Gender))
-            voices = voices.Where(v => v.Gender.Equals(req.Gender, StringComparison.OrdinalIgnoreCase)).ToList();
-        voices = voices.OrderBy(v => v.ShortName).ToList();
+            voices = voices.Where(v => v.Gender.Equals(req.Gender, StringComparison.OrdinalIgnoreCase));
+        voices = voices.OrderBy(v => v.ShortName);
 
         if (req.Detail == "low")
             return voices.Select(v => v.ShortName);
-        return voices;
+        return voices.Select(v => new { v.ShortName, v.Locale, v.Gender });
     }
 }

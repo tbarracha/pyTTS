@@ -1,6 +1,6 @@
 # TtsApi (.NET)
 
-This project replicates the simple text-to-speech API implemented in the Python `pyTTS` project. It uses ASP.NET Core 6, Microsoft Cognitive Services Speech SDK, and Entity Framework Core (in-memory) for persistence.
+This project replicates the simple text-to-speech API implemented in the Python `pyTTS` project. It uses ASP.NET Core 6 and the Microsoft Cognitive Services Speech SDK.
 
 ## Endpoints
 
@@ -16,7 +16,7 @@ This project replicates the simple text-to-speech API implemented in the Python 
 
 Returns an audio file. When `stream` is `true` the file bytes are streamed in the response.
 
-- `POST /voices` – list available voices stored in the database. Accepts filters for language, gender and detail (`"low"` only returns the voice short names).
+- `POST /voices` – list available voices from the Speech service. Accepts filters for language, gender and detail (`"low"` only returns the voice short names).
 
 ## Running
 

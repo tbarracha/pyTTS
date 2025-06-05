@@ -1,14 +1,9 @@
 using Microsoft.CognitiveServices.Speech;
-using Microsoft.EntityFrameworkCore;
-using TtsApi.Data;
 using TtsApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("tts"));
 
 var speechKey = builder.Configuration["SpeechKey"];
 var speechRegion = builder.Configuration["SpeechRegion"];
